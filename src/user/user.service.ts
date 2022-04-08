@@ -22,7 +22,7 @@ export class UserService {
         createUserDto.role === Role.PROVIDER ? this.createMeetingId(10) : null,
       email: createUserDto.email,
       password:
-        createUserDto.role === Role.PROVIDER ? 'provider@123' : 'patient@123',
+        createUserDto.role === Role.PROVIDER ? 'Provider@123' : 'Patient@123',
       mob: createUserDto.mob,
     });
     return await userModel.save();
