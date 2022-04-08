@@ -17,7 +17,4 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   mob: string;
-
-  @IsNotEmpty()
-  password: string;
 }

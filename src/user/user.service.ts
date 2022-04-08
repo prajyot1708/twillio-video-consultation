@@ -21,7 +21,8 @@ export class UserService {
       meetingId:
         createUserDto.role === Role.PROVIDER ? this.createMeetingId(10) : null,
       email: createUserDto.email,
-      password: createUserDto.password,
+      password:
+        createUserDto.role === Role.PROVIDER ? 'provider@123' : 'patient@123',
       mob: createUserDto.mob,
     });
     return await userModel.save();
@@ -41,11 +42,13 @@ export class UserService {
   }
 
   async verifyLogin(query: VerifyLoginDTO) {
-    const result =await this._userModel.findOne({
-      email: query.email,
-      password: query.password,
-      active: true,
-    }).lean();
+    const result = await this._userModel
+      .findOne({
+        email: query.email,
+        password: query.password,
+        active: true,
+      })
+      .lean();
     return result;
   }
 }
