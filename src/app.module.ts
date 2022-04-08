@@ -5,8 +5,8 @@ import { AppService } from './app.service';
 import twillioConfig from './config/twillio.config';
 import databaseConfig, { DatabaseConfig } from './config/db.config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserModule } from './user/user.module';
-import { TwillioModule } from './twillio/twillio.module';
+import { UserModule } from './modules/user/user.module';
+import { TwillioModule } from './modules/twillio/twillio.module';
 
 @Module({
   imports: [
