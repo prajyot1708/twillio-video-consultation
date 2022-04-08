@@ -67,9 +67,8 @@ export class TwillioService implements OnModuleInit {
       );
       token.addGrant(videoGrant);
       return { token: token.toJwt(), room: room }; // Serialize the token to a JWT string
-    } catch (e) {
-      console.log('e', e);
-      return e;
+    } catch (error) {
+      return error;
     }
   }
 }

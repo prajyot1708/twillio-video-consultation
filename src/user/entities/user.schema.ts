@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Role } from 'src/shared/enum/roles.enum';
+const SALT_WORK_FACTOR = 10;
+const bcrypt = require('bcrypt')
 
 export type UserDocument = User & Document;
 
@@ -28,3 +30,5 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+    

@@ -5,6 +5,9 @@ import { User, UserDocument } from './entities/user.schema';
 import { Model } from 'mongoose';
 import { Role } from 'src/shared/enum/roles.enum';
 import { VerifyLoginDTO } from './dto/verify-login.dto';
+import * as bcrypt from 'bcrypt';
+import { UserMapper } from './mapper';
+const saltOrRounds = 10;
 
 @Injectable()
 export class UserService {
@@ -22,7 +25,9 @@ export class UserService {
         createUserDto.role === Role.PROVIDER ? this.createMeetingId(10) : null,
       email: createUserDto.email,
       password:
-        createUserDto.role === Role.PROVIDER ? 'Provider@123' : 'Patient@123',
+        createUserDto.role === Role.PROVIDER
+          ? await bcrypt.hash('Provider@123', saltOrRounds)
+          : await bcrypt.hash('Patient@123', saltOrRounds),
       mob: createUserDto.mob,
     });
     return await userModel.save();
@@ -38,17 +43,20 @@ export class UserService {
   }
 
   async findAll() {
-    return await this._userModel.find();
+    const result = await this._userModel.find();
+    return result.map(UserMapper.toUserListDTO);
   }
 
   async verifyLogin(query: VerifyLoginDTO) {
-    const result = await this._userModel
-      .findOne({
-        email: query.email,
-        password: query.password,
-        active: true,
-      })
-      .lean();
-    return result;
+    const result = await this._userModel.findOne({
+      email: query.email,
+      active: true,
+    });
+    const isMatch = await bcrypt.compare(query.password, result.password);
+    if (isMatch) {
+      return UserMapper.toUserDTO(result);
+    } else {
+      return null;
+    }
   }
 }
