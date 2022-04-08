@@ -20,12 +20,11 @@ export class User {
   @Prop({ required: true, default: true })
   active: boolean;
 
-  @Prop({ required: true })
+  @Prop({ required: true, index: true, unique: true })
   email: string;
 
   @Prop({ maxlength: 200 })
   password: string;
-  
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

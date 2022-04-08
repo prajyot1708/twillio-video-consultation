@@ -20,8 +20,13 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('user')
-  async create(@Body() createUserDto: CreateUserDto) {
-    return await this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
+    try{
+      const user = await this.userService.create(createUserDto); 
+      res.status(HttpStatus.OK).send(user)
+    }catch(error){
+      res.status(HttpStatus.FORBIDDEN).send('Email ID already exists')
+    }
   }
 
   @Get('user')
