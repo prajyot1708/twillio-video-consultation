@@ -7,6 +7,7 @@ import { Role } from 'src/shared/enum/roles.enum';
 import { VerifyLoginDTO } from './dto/verify-login.dto';
 import * as bcrypt from 'bcrypt';
 import { UserMapper } from './mapper';
+import { EmailService } from 'src/shared/service/email.service';
 const saltOrRounds = 10;
 
 @Injectable()
@@ -14,26 +15,33 @@ export class UserService {
   constructor(
     @InjectModel(User.name)
     private readonly _userModel: Model<UserDocument>,
+    private readonly _emailService: EmailService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
+    const password = this.generateRandomString(10);
     const userModel = new this._userModel({
       firstName: createUserDto.firstName,
       lastName: createUserDto.lastName,
       role: createUserDto.role,
       meetingId:
-        createUserDto.role === Role.PROVIDER ? this.createMeetingId(10) : null,
-      email: createUserDto.email,
-      password:
         createUserDto.role === Role.PROVIDER
-          ? await bcrypt.hash('Provider@123', saltOrRounds)
-          : await bcrypt.hash('Admin@123', saltOrRounds),
+          ? this.generateRandomString(10)
+          : null,
+      email: createUserDto.email,
+      password: await bcrypt.hash(password, saltOrRounds),
       mob: createUserDto.mob,
     });
-    return await userModel.save();
+    const user = await userModel.save();
+    this._emailService.sendEmail(
+      createUserDto.email,
+      `TeleMed2U : Registration password`,
+      `Please find the password which you can use for login into TeleMed2U: ${password}`,
+    );
+    return UserMapper.toUserDTO(user);
   }
 
-  createMeetingId(length) {
+  generateRandomString(length) {
     const chars =
       '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let result = '';

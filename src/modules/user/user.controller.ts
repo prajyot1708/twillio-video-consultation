@@ -50,7 +50,6 @@ export class UserController {
     if (result) {
       res.status(HttpStatus.OK).send(result);
     } else {
-      console.log('going');
       res
         .status(HttpStatus.FORBIDDEN)
         .send({ message: WRONG_USERNAME_OR_PASSWORD });

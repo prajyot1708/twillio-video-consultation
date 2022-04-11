@@ -1,7 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 const twilio = require('twilio');
-import { throwError } from 'rxjs';
 import { TwillioConfig } from 'src/config/twillio.config';
 import { GenerateTokenDTO } from './dto/generate-token.dto';
 

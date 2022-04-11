@@ -7,11 +7,13 @@ import databaseConfig, { DatabaseConfig } from './config/db.config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './modules/user/user.module';
 import { TwillioModule } from './modules/twillio/twillio.module';
+import emailConfig from './config/email.config';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [databaseConfig, twillioConfig],
+      load: [databaseConfig, twillioConfig, emailConfig],
       cache: true,
     }),
     MongooseModule.forRootAsync({
@@ -26,6 +28,7 @@ import { TwillioModule } from './modules/twillio/twillio.module';
     }),
     UserModule,
     TwillioModule,
+    SharedModule
   ],
   controllers: [AppController],
   providers: [AppService],
