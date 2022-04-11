@@ -11,7 +11,7 @@ import { TwillioService } from './twillio.service';
 export class TwillioController {
   constructor(private readonly twillioService: TwillioService) {}
 
-  /** This endpoint generates twillio token required for video consultation*/
+  /** This endpoint   generates twillio token required for video consultation*/
   @Get(GENERATE_TWILLIO_TOKEN)
   async generateToken(@Query() query: GenerateTokenDTO) {
     return await this.twillioService.generateGrantToken(query);
