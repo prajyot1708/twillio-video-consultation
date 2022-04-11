@@ -27,7 +27,7 @@ export class UserService {
       password:
         createUserDto.role === Role.PROVIDER
           ? await bcrypt.hash('Provider@123', saltOrRounds)
-          : await bcrypt.hash('Patient@123', saltOrRounds),
+          : await bcrypt.hash('Admin@123', saltOrRounds),
       mob: createUserDto.mob,
     });
     return await userModel.save();
