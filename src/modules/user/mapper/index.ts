@@ -10,6 +10,7 @@ export class UserMapper {
     dto.email = entity.email;
     dto.meetingId = entity.meetingId;
     dto.role = entity.role;
+    dto.mob = entity.mob;
     return dto;
   }
 
