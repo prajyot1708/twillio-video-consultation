@@ -44,9 +44,9 @@ export class UserController {
   }
 
   /** This endpoint verify user using username and password*/
-  @Get(VERIFY_LOGIN)
-  async verifyLogin(@Query() query: VerifyLoginDTO, @Res() res: Response) {
-    const result = await this.userService.verifyLogin(query);
+  @Post(VERIFY_LOGIN)
+  async verifyLogin(@Body() body: VerifyLoginDTO, @Res() res: Response) {
+    const result = await this.userService.verifyLogin(body);
     if (result) {
       res.status(HttpStatus.OK).send(result);
     } else {

@@ -81,12 +81,12 @@ export class UserService {
     return result.map(UserMapper.toUserListDTO);
   }
 
-  async verifyLogin(query: VerifyLoginDTO) {
+  async verifyLogin(body: VerifyLoginDTO) {
     const result = await this._userModel.findOne({
-      email: query.email,
+      email: body.email,
       active: true,
     });
-    const isMatch = await bcrypt.compare(query.password, result.password);
+    const isMatch = await bcrypt.compare(body.password, result.password);
     if (isMatch) {
       return UserMapper.toUserDTO(result);
     } else {
