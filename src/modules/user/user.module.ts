@@ -4,11 +4,13 @@ import { UserController } from './user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './entities/user.schema';
 import { SharedModule } from 'src/shared/shared.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    SharedModule
+    SharedModule,
+    ConfigModule
   ],
   controllers: [UserController],
   providers: [UserService],

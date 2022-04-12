@@ -8,6 +8,8 @@ import { VerifyLoginDTO } from './dto/verify-login.dto';
 import * as bcrypt from 'bcrypt';
 import { UserMapper } from './mapper';
 import { EmailService } from 'src/shared/service/email.service';
+import { ConfigService } from '@nestjs/config';
+import { EmailConfig } from 'src/config/email.config';
 const saltOrRounds = 10;
 
 @Injectable()
@@ -16,6 +18,7 @@ export class UserService {
     @InjectModel(User.name)
     private readonly _userModel: Model<UserDocument>,
     private readonly _emailService: EmailService,
+    private readonly _configService: ConfigService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -33,11 +36,34 @@ export class UserService {
       mob: createUserDto.mob,
     });
     const user = await userModel.save();
-    this._emailService.sendEmail(
-      createUserDto.email,
-      `TeleMed2U : Registration password`,
-      `Please find the password which you can use for login into TeleMed2U: ${password}`,
-    );
+    const emailConfig = this._configService.get<EmailConfig>('email');
+    if (emailConfig.dispatch === 'true') {
+      this._emailService.sendEmail(
+        createUserDto.email,
+        `Welcome to TeleMed2U`,
+        ` <html>
+          <body>
+          <pre>
+          Hi ${createUserDto.firstName} ${createUserDto.lastName},
+
+          Welcome to TeleMed2U video consultation platform.
+          
+          You can start access the platform by using below credentials.
+          
+          User Name - ${createUserDto.email}
+          Password - ${password}
+          
+          For support, please email us at support@telemed2u.com
+          or call us at (855) 446-8629
+          
+          Regards,
+          
+          TeleMed2U
+          </pre>
+          </body>
+          </html>`,
+      );
+    }
     return UserMapper.toUserDTO(user);
   }
 
