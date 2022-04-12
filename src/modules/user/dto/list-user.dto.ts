@@ -4,4 +4,5 @@ export class UserListReplyDTO {
   role: string;
   meetingId: string;
   email: string;
+  mob:string;
 }
